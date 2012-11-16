@@ -4,9 +4,11 @@
 
 function setMessage(message, error) {
 	if (error) {
-		console.err("ERROR: " + message);
+		console.err("csvtojson ERROR: " + message);
 	} else {
-		console.log(message);
+		if (message.trim() != '') {
+			console.log("csvtojson: " + message);
+		}
 	}
 }
 
@@ -54,21 +56,18 @@ function parseCSVLine(line) {
 
 	return line;
 }
-			
-exports.csvToJson = function (csvText) {
+
+exports.csvToJson = function(csvText) {
 	var message = "";
 	var error = false;
 	var jsonText = "";
 
-	setMessage(message, error);
-
 	if (csvText == "") {
 		error = true;
-		message = "Enter CSV text below.";
+		message = "No CSV data present";
 	}
 
 	if (!error) {
-		benchmarkStart = new Date();
 		csvRows = csvText.split(/[\r\n]/g);
 		// split into rows
 
@@ -90,8 +89,6 @@ exports.csvToJson = function (csvText) {
 				csvRows[i] = parseCSVLine(csvRows[i]);
 			}
 
-			benchmarkParseEnd = new Date();
-
 			for (var i = 1; i < csvRows.length; i++) {
 				if (csvRows[i].length > 0)
 					objArr.push({});
@@ -101,43 +98,11 @@ exports.csvToJson = function (csvText) {
 				}
 			}
 
-			benchmarkObjEnd = new Date();
-
 			jsonText = JSON.stringify(objArr, null, "\t");
-
-			benchmarkJsonEnd = new Date();
-
-			benchmarkPopulateEnd = new Date();
-
-			//message = getBenchmarkResults();
 		}
 	}
 
 	setMessage(message, error);
-	
+
 	return jsonText;
-}
-
-function getBenchmarkResults() {
-	var message = "";
-	var totalTime = benchmarkPopulateEnd.getTime() - benchmarkStart.getTime();
-
-	var timeDiff = (benchmarkParseEnd.getTime() - benchmarkStart.getTime());
-	var mostTime = "parsing CSV text";
-	if ((benchmarkObjEnd.getTime() - benchmarkParseEnd.getTime()) > timeDiff) {
-		timeDiff = (benchmarkObjEnd.getTime() - benchmarkParseEnd.getTime());
-		mostTime = "converting to objects";
-	}
-	if ((benchmarkJsonEnd.getTime() - benchmarkObjEnd.getTime()) > timeDiff) {
-		timeDiff = (benchmarkJsonEnd.getTime() - benchmarkObjEnd.getTime());
-		mostTime = "building JSON text";
-	}
-	if ((benchmarkPopulateEnd.geTime() - benchmarkJsonEnd.getTime()) > timeDiff) {
-		timeDiff = (benchmarkPopulateEnd.getTime() - benchmarkJsonEnd.getTime());
-		mostTime = "populating JSON text";
-	}
-
-	message += csvRows.length + " CSV line" + (csvRows.length > 1 ? 's' : "") + " converted into " + objArr.length + " object" + (objArr.length > 1 ? 's' : "") + " in " + (totalTime / 1000) + " seconds, with an average of " + ((totalTime / 1000) / csvRows.length) + " seconds per object. Most of the time was spent on " + mostTime + ", which took " + (timeDiff / 1000) + " seconds.";
-
-	return message;
 }
