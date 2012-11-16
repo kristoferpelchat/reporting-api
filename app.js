@@ -2,7 +2,13 @@
  * Module dependencies.
  */
 
-var express = require('express'), csvToJson = require('./csvtojson'), fs = require('fs'), path = require('path'), util = require('util'), config = require('./configuration');
+var express = require('express'), 
+	csvToJson = require('./csvtojson'), 
+	fs = require('fs'), 
+	path = require('path'), 
+	util = require('util'), 
+	config = require('./configuration'),
+	tokenlib = require('./token');
 
 var app = module.exports = express();
 
@@ -15,9 +21,45 @@ app.use(function(err, req, res, next) {
 	res.send(err.stack);
 });
 
+app.get('/token/validate', function(req, res, next) {
+	var token = req.headers['x-reportingapi-token'];
+	console.log('avast-reporting-api x-reportingapi-token: ' + token);
+	
+	if (!tokenlib.validate(token)) {
+		next(new Error('Token is invalid: ' + token));
+	}
+	
+	var result = {
+		"status" : "ok"
+	}
+	
+	res.send(result);
+});
+
+app.get('/token/refresh', function(req, res, next) {
+	var token = req.headers['x-reportingapi-token'];
+	console.log('avast-reporting-api x-reportingapi-token: ' + token);
+	
+	if (!tokenlib.validate(token)) {
+		next(new Error('Token is invalid: ' + token));
+	}
+	
+	var newToken = tokenlib.refresh();
+	var result = {
+		"status" : "ok",
+		"token" : newToken
+	}
+	
+	res.send(result);
+});
+
 app.get('/locales', function(req, res, next) {
 	var token = req.headers['x-reportingapi-token'];
 	console.log('avast-reporting-api x-reportingapi-token: ' + token);
+	
+	if (!tokenlib.validate(token)) {
+		next(new Error('Token is invalid: ' + token));
+	}
 	
 	res.send(config.locales);
 });
@@ -28,7 +70,11 @@ app.post('/report', function(req, res, next) {
 	console.log("avast-reporting-api request body data: " + body);
 	console.log('avast-reporting-api x-reportingapi-token: ' + token);
 	
-	var day = req.body.day
+	if (!tokenlib.validate(token)) {
+		next(new Error('Token is invalid: ' + token));
+	}
+
+	var day = req.body.day;
 	
 	if (day == null) {
 		next(new Error('day parameter in POST is not present'));

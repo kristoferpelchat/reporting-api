@@ -6,6 +6,10 @@ const encoding = 'utf8';
 const responseContentType = 'application/json; charset=utf8';
 const csvFileSuffix = 'Avast_Calls_Stats_';
 const csvFilePostfix = '.csv';
+const tokenCipherAlgorithm = 'aes-256-cbc';
+const tokenCipherKey = 'InmbuvP6Z8';
+const tokenCipherFormat = 'hex';
+const tokenTextFile = './token.txt';
 
 /**
  * These are all the supported locales for this system
@@ -24,5 +28,9 @@ module.exports = {
    responseContentType : responseContentType,
    locales : locales,
    csvFileSuffix : csvFileSuffix,
-   csvFilePostfix : csvFilePostfix
+   csvFilePostfix : csvFilePostfix,
+   tokenCipherAlgorithm : tokenCipherAlgorithm,
+   tokenCipherKey : tokenCipherKey,
+   tokenCipherFormat : tokenCipherFormat,
+   tokenTextFile : tokenTextFile
 };
