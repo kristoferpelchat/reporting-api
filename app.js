@@ -1,7 +1,6 @@
 /**
  * Module dependencies.
  */
-
 var express = require('express'), 
 	csvToJson = require('./csvtojson'), 
 	fs = require('fs'), 
@@ -21,7 +20,7 @@ app.use(function(err, req, res, next) {
 	res.send(err.stack);
 });
 
-app.get('/token/validate', function(req, res, next) {
+app.get('/tokens/verify', function(req, res, next) {
 	var token = req.headers['x-reportingapi-token'];
 	console.log('avast-reporting-api x-reportingapi-token: ' + token);
 	
@@ -36,7 +35,7 @@ app.get('/token/validate', function(req, res, next) {
 	res.send(result);
 });
 
-app.get('/token/refresh', function(req, res, next) {
+app.get('/tokens/refresh', function(req, res, next) {
 	var token = req.headers['x-reportingapi-token'];
 	console.log('avast-reporting-api x-reportingapi-token: ' + token);
 	
