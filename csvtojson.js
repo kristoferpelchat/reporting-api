@@ -2,6 +2,12 @@
  * This Javascript file will handle conversion from CSV to JSON
  */
 
+/**
+ * Private function to simply log a message to STDOUT or STDERR
+ * 
+ * @param {Object} message
+ * @param {Object} error
+ */
 function setMessage(message, error) {
 	if (error) {
 		console.err("csvtojson ERROR: " + message);
@@ -12,6 +18,11 @@ function setMessage(message, error) {
 	}
 }
 
+/**
+ * Proviate method to parse the CSV line itself
+ * 
+ * @param {Object} line
+ */
 function parseCSVLine(line) {
 	line = line.split(',');
 
@@ -57,6 +68,13 @@ function parseCSVLine(line) {
 	return line;
 }
 
+/**
+ * This is the publically facing method to convert the CSV
+ * text passed in. Result will be the JSON version of this.
+ * If there are multiple records, each record is an object
+ * in the JSON passed back.
+ * @param {Object} csvText
+ */
 exports.csvToJson = function(csvText) {
 	var message = "";
 	var error = false;
