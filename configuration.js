@@ -1,7 +1,7 @@
 /**
  * Constants relating to application conifiguration
  */
-const absolutePathToCSVFile = '/Users/kristofer_pelchat/Development/github/avast-reporting-api/data/';
+const absolutePathToCSVFile = '/Users/kristofer_pelchat/Development/github/avast-reporting-api/test/data/';
 const encoding = 'utf8';
 const responseContentType = 'application/json; charset=utf8';
 const csvFileSuffix = 'Avast_Calls_Stats_';
