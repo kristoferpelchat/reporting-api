@@ -35,6 +35,10 @@ vows.describe('/avast/testing/locales').addBatch({
 				},
 				"should respond with 500" : function(err, res, body) {
 					assert.equal(res.statusCode, 500);
+				},
+				"should respond with error" : function(err, res, body) {
+					var result = JSON.parse(body);
+					assert.equal(result.status, "error");
 				}
 			}
 		}
@@ -64,10 +68,7 @@ vows.describe('/avast/testing/tokens/verify').addBatch({
 				"should respond with ok" : function(err, res, body) {
 					var result = JSON.parse(body);
 					assert.equal(result.status, "ok");
-				}//,
-				//"should respond with x-reportingapi-token" : function(err, res, body) {
-				//	assert.include(res.headers, 'x-reportingapi-token');
-				//}
+				}
 			},
 			"A GET to /tokens/verify - negative1" : {
 				topic : function() {
@@ -85,6 +86,10 @@ vows.describe('/avast/testing/tokens/verify').addBatch({
 				},
 				"should respond with 500" : function(err, res, body) {
 					assert.equal(res.statusCode, 500);
+				},
+				"should respond with error" : function(err, res, body) {
+					var result = JSON.parse(body);
+					assert.equal(result.status, "error");
 				}
 			}
 		}
@@ -150,6 +155,10 @@ vows.describe('/avast/testing/report').addBatch({
 				},
 				"should respond with 500 - negative1" : function(err, res, body) {
 					assert.equal(res.statusCode, 500);
+				},
+				"should respond with error" : function(err, res, body) {
+					var result = JSON.parse(body);
+					assert.equal(result.status, "error");
 				}
 			},
 			"A POST to report - negative2" : {
@@ -168,6 +177,10 @@ vows.describe('/avast/testing/report').addBatch({
 				},
 				"should respond with 500 - negative2" : function(err, res, body) {
 					assert.equal(res.statusCode, 500);
+				},
+				"should respond with error" : function(err, res, body) {
+					var result = JSON.parse(body);
+					assert.equal(result.status, "error");
 				}
 			},
 			"A POST to report - negative3" : {
@@ -186,6 +199,10 @@ vows.describe('/avast/testing/report').addBatch({
 				},
 				"should respond with 500 - negative3" : function(err, res, body) {
 					assert.equal(res.statusCode, 500);
+				},
+				"should respond with error" : function(err, res, body) {
+					var result = JSON.parse(body);
+					assert.equal(result.status, "error");
 				}
 			}
 		}

@@ -16,12 +16,8 @@ var app = module.exports = express();
  * Middleware
  */
 app.use(express.bodyParser());
-app.use(function(err, req, res, next) {
-	console.error(err);
-	console.error(err.stack);
-	res.status(500);
-	res.send(err.stack);
-});
+app.use(express.methodOverride());
+app.use(app.router);
 
 /**
  * Token verifcation functionality. The x-reportingapi-token HTTP header is sent
@@ -119,7 +115,11 @@ app.post('/report', function(req, res, next) {
 		next(new Error('CSV file could not be found'));
 	}
 	
-	var csvString = fs.readFileSync(filePath, config.encoding);
+	try {
+		var csvString = fs.readFileSync(filePath, config.encoding);
+	} catch (err) {
+		next(new Error('Problem finding data for the day: ' + day));
+	}
 	
 	var jsonResult = csvToJson.csvToJson(csvString)
 
@@ -134,3 +134,19 @@ if (!module.parent) {
 	app.listen(3000);
 	console.log('avast-reporting-api started on port 3000');
 }
+
+/**
+ * This is our catch all error functionality so that we can
+ * send back errors in a common way.
+ */
+app.use(function (err, req, res, next) {
+	console.error(err.stack);
+
+	var result = {
+		"status" : "error",
+		"message" : err.toString()
+	}
+
+	res.status(500);
+	res.send(result);
+});
