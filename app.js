@@ -7,7 +7,8 @@ var express = require('express'),
 	path = require('path'), 
 	util = require('util'), 
 	config = require('./configuration'),
-	tokenlib = require('./token');
+	tokenlib = require('./token'),
+	moment = require('moment');
 
 var app = module.exports = express();
 
@@ -105,21 +106,25 @@ app.post('/report', function(req, res, next) {
 	var day = req.body.day;
 	
 	if (day == null) {
-		next(new Error('day parameter in POST is not present'));
-	} else {
-		var filePath = path.join(config.absolutePathToCSVFile, config.csvFileSuffix + day + config.csvFilePostfix);
-		
-		if (filePath == null) {
-			next(new Error('CSV file could not be found'));
-		}
-		
-		var csvString = fs.readFileSync(filePath, config.encoding);
-		
-		var jsonResult = csvToJson.csvToJson(csvString)
+		var yesterday = new Date();
+		yesterday.setDate(yesterday.getDate() - 1);
+		var m = moment(yesterday);
+		day = m.format(config.dayDateFormat);
+		console.log('avast-reporting-api day was not passed in but is now set to: ' + day);
+	} 
 	
-		res.contentType(config.responseContentType);
-	    res.send(jsonResult);
+	var filePath = path.join(config.absolutePathToCSVFile, config.csvFileSuffix + day + config.csvFilePostfix);
+	
+	if (filePath == null) {
+		next(new Error('CSV file could not be found'));
 	}
+	
+	var csvString = fs.readFileSync(filePath, config.encoding);
+	
+	var jsonResult = csvToJson.csvToJson(csvString)
+
+	res.contentType(config.responseContentType);
+    res.send(jsonResult);
 });
 
 /**

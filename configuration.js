@@ -10,6 +10,7 @@ const tokenCipherAlgorithm = 'aes-256-cbc';
 const tokenCipherKey = 'InmbuvP6Z8';
 const tokenCipherFormat = 'hex';
 const tokenTextFile = './token.txt';
+const dayDateFormat = 'YYYY-MM-DD';
 
 /**
  * These are all the supported locales for this system
@@ -32,5 +33,6 @@ module.exports = {
    tokenCipherAlgorithm : tokenCipherAlgorithm,
    tokenCipherKey : tokenCipherKey,
    tokenCipherFormat : tokenCipherFormat,
-   tokenTextFile : tokenTextFile
+   tokenTextFile : tokenTextFile,
+   dayDateFormat : dayDateFormat
 };
