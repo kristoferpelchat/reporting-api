@@ -33,8 +33,8 @@ vows.describe('/avast/testing/locales').addBatch({
 						}
 					}, this.callback)
 				},
-				"should respond with 500" : function(err, res, body) {
-					assert.equal(res.statusCode, 500);
+				"should respond with 401" : function(err, res, body) {
+					assert.equal(res.statusCode, 401);
 				},
 				"should respond with error" : function(err, res, body) {
 					var result = JSON.parse(body);
@@ -84,8 +84,8 @@ vows.describe('/avast/testing/tokens/verify').addBatch({
 						}
 					}, this.callback)
 				},
-				"should respond with 500" : function(err, res, body) {
-					assert.equal(res.statusCode, 500);
+				"should respond with 401" : function(err, res, body) {
+					assert.equal(res.statusCode, 401);
 				},
 				"should respond with error" : function(err, res, body) {
 					var result = JSON.parse(body);
@@ -153,8 +153,8 @@ vows.describe('/avast/testing/report').addBatch({
 						}
 					}, this.callback)
 				},
-				"should respond with 500 - negative1" : function(err, res, body) {
-					assert.equal(res.statusCode, 500);
+				"should respond with 401 - negative1" : function(err, res, body) {
+					assert.equal(res.statusCode, 401);
 				},
 				"should respond with error" : function(err, res, body) {
 					var result = JSON.parse(body);
@@ -175,8 +175,8 @@ vows.describe('/avast/testing/report').addBatch({
 						}
 					}, this.callback)
 				},
-				"should respond with 500 - negative2" : function(err, res, body) {
-					assert.equal(res.statusCode, 500);
+				"should respond with 404 - negative2" : function(err, res, body) {
+					assert.equal(res.statusCode, 404);
 				},
 				"should respond with error" : function(err, res, body) {
 					var result = JSON.parse(body);
@@ -197,8 +197,8 @@ vows.describe('/avast/testing/report').addBatch({
 						}
 					}, this.callback)
 				},
-				"should respond with 500 - negative3" : function(err, res, body) {
-					assert.equal(res.statusCode, 500);
+				"should respond with 404 - negative3" : function(err, res, body) {
+					assert.equal(res.statusCode, 404);
 				},
 				"should respond with error" : function(err, res, body) {
 					var result = JSON.parse(body);

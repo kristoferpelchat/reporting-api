@@ -19,6 +19,24 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 
+function InvalidTokenError(msg){
+  this.name = 'InvalidTokenError';
+  this.message = msg;
+  Error.call(this, msg);
+  Error.captureStackTrace(this, arguments.callee);
+}
+
+InvalidTokenError.prototype.__proto__ = Error.prototype;
+
+function ReportNotFoundError(msg){
+  this.name = 'ReportNotFoundError';
+  this.message = msg;
+  Error.call(this, msg);
+  Error.captureStackTrace(this, arguments.callee);
+}
+
+ReportNotFoundError.prototype.__proto__ = Error.prototype;
+
 /**
  * Token verifcation functionality. The x-reportingapi-token HTTP header is sent
  * in and verified. The verification of the token consists of making sure it is the
@@ -30,7 +48,7 @@ app.get('/tokens/verify', function(req, res, next) {
 	console.log('avast-reporting-api x-reportingapi-token: ' + token);
 	
 	if (!tokenlib.validate(token)) {
-		next(new Error('Token is invalid: ' + token));
+		next(new InvalidTokenError('Token is invalid: ' + token));
 	}
 	
 	var result = {
@@ -50,7 +68,7 @@ app.get('/tokens/refresh', function(req, res, next) {
 	console.log('avast-reporting-api x-reportingapi-token: ' + token);
 	
 	if (!tokenlib.validate(token)) {
-		next(new Error('Token is invalid: ' + token));
+		next(new InvalidTokenError('Token is invalid: ' + token));
 	}
 	
 	var newToken = tokenlib.refresh();
@@ -59,6 +77,7 @@ app.get('/tokens/refresh', function(req, res, next) {
 		"token" : newToken
 	}
 	
+	res.status(201);
 	res.send(result);
 });
 
@@ -72,7 +91,7 @@ app.get('/locales', function(req, res, next) {
 	console.log('avast-reporting-api x-reportingapi-token: ' + token);
 	
 	if (!tokenlib.validate(token)) {
-		next(new Error('Token is invalid: ' + token));
+		next(new InvalidTokenError('Token is invalid: ' + token));
 	}
 	
 	res.send(config.locales);
@@ -96,7 +115,7 @@ app.post('/report', function(req, res, next) {
 	console.log('avast-reporting-api x-reportingapi-token: ' + token);
 	
 	if (!tokenlib.validate(token)) {
-		next(new Error('Token is invalid: ' + token));
+		next(new InvalidTokenError('Token is invalid: ' + token));
 	}
 
 	var day = req.body.day;
@@ -112,13 +131,13 @@ app.post('/report', function(req, res, next) {
 	var filePath = path.join(config.absolutePathToCSVFile, config.csvFileSuffix + day + config.csvFilePostfix);
 	
 	if (filePath == null) {
-		next(new Error('CSV file could not be found'));
+		next(new ReportNotFoundError('CSV file could not be found'));
 	}
 	
 	try {
 		var csvString = fs.readFileSync(filePath, config.encoding);
 	} catch (err) {
-		next(new Error('Problem finding data for the day: ' + day));
+		next(new ReportNotFoundError('Problem finding data for the day: ' + day));
 	}
 	
 	var jsonResult = csvToJson.csvToJson(csvString)
@@ -144,9 +163,15 @@ app.use(function (err, req, res, next) {
 
 	var result = {
 		"status" : "error",
-		"message" : err.toString()
+		"reason" : err.message
 	}
 
-	res.status(500);
+	if (err instanceof InvalidTokenError) {
+		res.status(401);
+	} else if (err instanceof ReportNotFoundError) {
+		res.status(404);
+	} else {
+		res.status(500);
+	}
 	res.send(result);
 });

@@ -19,8 +19,8 @@ vows.describe('/avast/testing/tokens/refresh').addBatch({
 						}
 					}, this.callback)
 				},
-				"should respond with 200" : function(err, res, body) {
-					assert.equal(res.statusCode, 200);
+				"should respond with 201" : function(err, res, body) {
+					assert.equal(res.statusCode, 201);
 				},
 				"should respond with ok" : function(err, res, body) {
 					var result = JSON.parse(body);
@@ -41,8 +41,12 @@ vows.describe('/avast/testing/tokens/refresh').addBatch({
 						}
 					}, this.callback)
 				},
-				"should respond with 500" : function(err, res, body) {
-					assert.equal(res.statusCode, 500);
+				"should respond with 401" : function(err, res, body) {
+					assert.equal(res.statusCode, 401);
+				},
+				"should respond with error" : function(err, res, body) {
+					var result = JSON.parse(body);
+					assert.equal(result.status, "error");
 				}
 			}
 		}
