@@ -1,11 +1,11 @@
 /**
  * Module dependencies.
  */
-var express = require('express'), 
-	csvToJson = require('./csvtojson'), 
-	fs = require('fs'), 
-	path = require('path'), 
-	util = require('util'), 
+var express = require('express'),
+	csvToJson = require('./csvtojson'),
+	fs = require('fs'),
+	path = require('path'),
+	util = require('util'),
 	config = require('./configuration'),
 	tokenlib = require('./token'),
 	moment = require('moment');
@@ -19,20 +19,20 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 
-function InvalidTokenError(msg){
-  this.name = 'InvalidTokenError';
-  this.message = msg;
-  Error.call(this, msg);
-  Error.captureStackTrace(this, arguments.callee);
+function InvalidTokenError(msg) {
+	this.name = 'InvalidTokenError';
+	this.message = msg;
+	Error.call(this, msg);
+	Error.captureStackTrace(this, arguments.callee);
 }
 
 InvalidTokenError.prototype.__proto__ = Error.prototype;
 
-function ReportNotFoundError(msg){
-  this.name = 'ReportNotFoundError';
-  this.message = msg;
-  Error.call(this, msg);
-  Error.captureStackTrace(this, arguments.callee);
+function ReportNotFoundError(msg) {
+	this.name = 'ReportNotFoundError';
+	this.message = msg;
+	Error.call(this, msg);
+	Error.captureStackTrace(this, arguments.callee);
 }
 
 ReportNotFoundError.prototype.__proto__ = Error.prototype;
@@ -46,15 +46,15 @@ ReportNotFoundError.prototype.__proto__ = Error.prototype;
 app.get('/tokens/verify', function(req, res, next) {
 	var token = req.headers['x-reportingapi-token'];
 	console.log('avast-reporting-api x-reportingapi-token: ' + token);
-	
+
 	if (!tokenlib.validate(token)) {
 		next(new InvalidTokenError('Token is invalid: ' + token));
 	}
-	
+
 	var result = {
-		"status" : "ok"
-	}
-	
+		"status": "ok"
+	};
+
 	res.send(result);
 });
 
@@ -66,17 +66,17 @@ app.get('/tokens/verify', function(req, res, next) {
 app.get('/tokens/refresh', function(req, res, next) {
 	var token = req.headers['x-reportingapi-token'];
 	console.log('avast-reporting-api x-reportingapi-token: ' + token);
-	
+
 	if (!tokenlib.validate(token)) {
 		next(new InvalidTokenError('Token is invalid: ' + token));
 	}
-	
+
 	var newToken = tokenlib.refresh();
 	var result = {
-		"status" : "ok",
-		"token" : newToken
-	}
-	
+		"status": "ok",
+		"token": newToken
+	};
+
 	res.status(201);
 	res.send(result);
 });
@@ -89,11 +89,11 @@ app.get('/tokens/refresh', function(req, res, next) {
 app.get('/locales', function(req, res, next) {
 	var token = req.headers['x-reportingapi-token'];
 	console.log('avast-reporting-api x-reportingapi-token: ' + token);
-	
+
 	if (!tokenlib.validate(token)) {
 		next(new InvalidTokenError('Token is invalid: ' + token));
 	}
-	
+
 	res.send(config.locales);
 });
 
@@ -113,37 +113,37 @@ app.post('/report', function(req, res, next) {
 	var token = req.headers['x-reportingapi-token'];
 	console.log("avast-reporting-api request body data: " + body);
 	console.log('avast-reporting-api x-reportingapi-token: ' + token);
-	
+
 	if (!tokenlib.validate(token)) {
 		next(new InvalidTokenError('Token is invalid: ' + token));
 	}
 
 	var day = req.body.day;
-	
+
 	if (day == null) {
 		var yesterday = new Date();
 		yesterday.setDate(yesterday.getDate() - 1);
 		var m = moment(yesterday);
 		day = m.format(config.dayDateFormat);
 		console.log('avast-reporting-api day was not passed in but is now set to: ' + day);
-	} 
-	
+	}
+
 	var filePath = path.join(config.absolutePathToCSVFile, config.csvFileSuffix + day + config.csvFilePostfix);
-	
+
 	if (filePath == null) {
 		next(new ReportNotFoundError('CSV file could not be found'));
 	}
-	
+
+	var csvString;
 	try {
-		var csvString = fs.readFileSync(filePath, config.encoding);
+		csvString = fs.readFileSync(filePath, config.encoding);
 	} catch (err) {
 		next(new ReportNotFoundError('Problem finding data for the day: ' + day));
 	}
-	
-	var jsonResult = csvToJson.csvToJson(csvString)
 
-	res.contentType(config.responseContentType);
-    res.send(jsonResult);
+	var jsonResult = csvToJson.csvToJson(csvString);
+
+	res.contentType(config.responseContentType);  res.send(jsonResult);
 });
 
 /**
@@ -158,13 +158,13 @@ if (!module.parent) {
  * This is our catch all error functionality so that we can
  * send back errors in a common way.
  */
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
 	console.error(err.stack);
 
 	var result = {
-		"status" : "error",
-		"reason" : err.message
-	}
+		"status": "error",
+		"reason": err.message
+	};
 
 	if (err instanceof InvalidTokenError) {
 		res.status(401);

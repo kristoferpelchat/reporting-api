@@ -30,16 +30,13 @@ function parseCSVLine(line) {
 	for (var i = 0; i < line.length; i++) {
 		var chunk = line[i].replace(/^[\s]*|[\s]*$/g, "");
 		var quote = "";
-		if (chunk.charAt(0) == '"' || chunk.charAt(0) == "'")
-			quote = chunk.charAt(0);
-		if (quote != "" && chunk.charAt(chunk.length - 1) == quote)
-			quote = "";
+		if (chunk.charAt(0) == '"' || chunk.charAt(0) == "'") quote = chunk.charAt(0);
+		if (quote != "" && chunk.charAt(chunk.length - 1) == quote) quote = "";
 
 		if (quote != "") {
 			var j = i + 1;
 
-			if (j < line.length)
-				chunk = line[j].replace(/^[\s]*|[\s]*$/g, "");
+			if (j < line.length) chunk = line[j].replace(/^[\s]*|[\s]*$/g, "");
 
 			while (j < line.length && chunk.charAt(chunk.length - 1) != quote) {
 				line[i] += ',' + line[j];
@@ -59,10 +56,8 @@ function parseCSVLine(line) {
 		line[i] = line[i].replace(/^[\s]*|[\s]*$/g, "");
 
 		// remove leading/trailing quotes
-		if (line[i].charAt(0) == '"')
-			line[i] = line[i].replace(/^"|"$/g, "");
-		else if (line[i].charAt(0) == "'")
-			line[i] = line[i].replace(/^'|'$/g, "");
+		if (line[i].charAt(0) == '"') line[i] = line[i].replace(/^"|"$/g, "");
+		else if (line[i].charAt(0) == "'") line[i] = line[i].replace(/^'|'$/g, "");
 	}
 
 	return line;
@@ -86,7 +81,7 @@ exports.csvToJson = function(csvText) {
 	}
 
 	if (!error) {
-		csvRows = csvText.split(/[\r\n]/g);
+		var csvRows = csvText.split(/[\r\n]/g);
 		// split into rows
 
 		// get rid of empty rows
@@ -101,15 +96,14 @@ exports.csvToJson = function(csvText) {
 			error = true;
 			message = "The CSV text MUST have a header row!";
 		} else {
-			objArr = [];
+			var objArr = [];
 
 			for (var i = 0; i < csvRows.length; i++) {
 				csvRows[i] = parseCSVLine(csvRows[i]);
 			}
 
 			for (var i = 1; i < csvRows.length; i++) {
-				if (csvRows[i].length > 0)
-					objArr.push({});
+				if (csvRows[i].length > 0) objArr.push({});
 
 				for (var j = 0; j < csvRows[i].length; j++) {
 					objArr[i - 1][csvRows[0][j]] = csvRows[i][j];
@@ -123,4 +117,4 @@ exports.csvToJson = function(csvText) {
 	setMessage(message, error);
 
 	return jsonText;
-}
+};

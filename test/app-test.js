@@ -1,42 +1,46 @@
-var request = require('request'), vows = require('vows'), assert = require('assert'), config = require('../configuration'), fs = require('fs');
+var request = require('request'),
+	vows = require('vows'),
+	assert = require('assert'),
+	config = require('../configuration'),
+	fs = require('fs');
 
 vows.describe('/avast/testing/locales').addBatch({
-	"AVAST testing of locales" : {
-		"AVAST testing of locales" : {
-			"A GET to /locales - positive1" : {
-				topic : function() {
+	"AVAST testing of locales": {
+		"AVAST testing of locales": {
+			"A GET to /locales - positive1": {
+				topic: function() {
 					request({
-						uri : 'http://localhost:3000/locales',
-						method : 'GET',
-						headers : {
-							'x-reportingapi-token' : fs.readFileSync(config.tokenTextFile, config.encoding)
+						uri: 'http://localhost:3000/locales',
+						method: 'GET',
+						headers: {
+							'x-reportingapi-token': fs.readFileSync(config.tokenTextFile, config.encoding)
 						}
-					}, this.callback)
+					}, this.callback);
 				},
-				"should respond with 200" : function(err, res, body) {
+				"should respond with 200": function(err, res, body) {
 					assert.equal(res.statusCode, 200);
 				},
-				"should respond with ok" : function(err, res, body) {
+				"should respond with ok": function(err, res, body) {
 					var result = JSON.parse(body);
 					assert.equal(result.locales[0].locale, "en-us");
 					assert.equal(result.locales[0].language, "English");
 					assert.equal(result.locales[0].country, "United States");
 				}
 			},
-			"A GET to /locales - negative1" : {
-				topic : function() {
+			"A GET to /locales - negative1": {
+				topic: function() {
 					request({
-						uri : 'http://localhost:3000/locales',
-						method : 'GET',
-						headers : {
-							'x-reportingapi-token' : ''
+						uri: 'http://localhost:3000/locales',
+						method: 'GET',
+						headers: {
+							'x-reportingapi-token': ''
 						}
-					}, this.callback)
+					}, this.callback);
 				},
-				"should respond with 401" : function(err, res, body) {
+				"should respond with 401": function(err, res, body) {
 					assert.equal(res.statusCode, 401);
 				},
-				"should respond with error" : function(err, res, body) {
+				"should respond with error": function(err, res, body) {
 					var result = JSON.parse(body);
 					assert.equal(result.status, "error");
 				}
@@ -46,48 +50,48 @@ vows.describe('/avast/testing/locales').addBatch({
 }).export(module);
 
 vows.describe('/avast/testing/tokens/verify').addBatch({
-	"AVAST testing of token verification" : {
-		"AVAST testing of token verification" : {
-			"A GET to /tokens/verify - positive1" : {
-				topic : function() {
+	"AVAST testing of token verification": {
+		"AVAST testing of token verification": {
+			"A GET to /tokens/verify - positive1": {
+				topic: function() {
 					request({
-						uri : 'http://localhost:3000/tokens/verify',
-						method : 'GET',
+						uri: 'http://localhost:3000/tokens/verify',
+						method: 'GET',
 						//body : JSON.stringify({
 						//	test : 'data'
 						//}),
-						headers : {
+						headers: {
 							//'Content-Type' : 'application/json',
-							'x-reportingapi-token' : fs.readFileSync(config.tokenTextFile, config.encoding)
+							'x-reportingapi-token': fs.readFileSync(config.tokenTextFile, config.encoding)
 						}
-					}, this.callback)
+					}, this.callback);
 				},
-				"should respond with 200" : function(err, res, body) {
+				"should respond with 200": function(err, res, body) {
 					assert.equal(res.statusCode, 200);
 				},
-				"should respond with ok" : function(err, res, body) {
+				"should respond with ok": function(err, res, body) {
 					var result = JSON.parse(body);
 					assert.equal(result.status, "ok");
 				}
 			},
-			"A GET to /tokens/verify - negative1" : {
-				topic : function() {
+			"A GET to /tokens/verify - negative1": {
+				topic: function() {
 					request({
-						uri : 'http://localhost:3000/tokens/verify',
-						method : 'GET',
+						uri: 'http://localhost:3000/tokens/verify',
+						method: 'GET',
 						//body : JSON.stringify({
 						//	test : 'data'
 						//}),
-						headers : {
+						headers: {
 							//'Content-Type' : 'application/json',
-							'x-reportingapi-token' : ''
+							'x-reportingapi-token': ''
 						}
-					}, this.callback)
+					}, this.callback);
 				},
-				"should respond with 401" : function(err, res, body) {
+				"should respond with 401": function(err, res, body) {
 					assert.equal(res.statusCode, 401);
 				},
-				"should respond with error" : function(err, res, body) {
+				"should respond with error": function(err, res, body) {
 					var result = JSON.parse(body);
 					assert.equal(result.status, "error");
 				}
@@ -97,26 +101,26 @@ vows.describe('/avast/testing/tokens/verify').addBatch({
 }).export(module);
 
 vows.describe('/avast/testing/report').addBatch({
-	"AVAST testing of report" : {
-		"AVAST testing of report" : {
-			"A POST to report - positive1" : {
-				topic : function() {
+	"AVAST testing of report": {
+		"AVAST testing of report": {
+			"A POST to report - positive1": {
+				topic: function() {
 					request({
-						uri : 'http://localhost:3000/report',
-						method : 'POST',
-						body : JSON.stringify({
-							day : "2012-11-14"
+						uri: 'http://localhost:3000/report',
+						method: 'POST',
+						body: JSON.stringify({
+							day: "2012-11-14"
 						}),
-						headers : {
-							'Content-Type' : 'application/json',
-							'x-reportingapi-token' : fs.readFileSync(config.tokenTextFile, config.encoding)
+						headers: {
+							'Content-Type': 'application/json',
+							'x-reportingapi-token': fs.readFileSync(config.tokenTextFile, config.encoding)
 						}
-					}, this.callback)
+					}, this.callback);
 				},
-				"should respond with 200" : function(err, res, body) {
+				"should respond with 200": function(err, res, body) {
 					assert.equal(res.statusCode, 200);
 				},
-				"should respond with resultant data" : function(err, res, body) {
+				"should respond with resultant data": function(err, res, body) {
 					var result = JSON.parse(body);
 					assert.equal(result[0].Date, "2012-11-14");
 					assert.equal(result[0]['Company Name'], "PlumChoice");
@@ -139,68 +143,68 @@ vows.describe('/avast/testing/report').addBatch({
 					assert.equal(result[0].CSAT, ".8125");
 				}
 			},
-			"A POST to report - negative1" : {
-				topic : function() {
+			"A POST to report - negative1": {
+				topic: function() {
 					request({
-						uri : 'http://localhost:3000/report',
-						method : 'POST',
-						body : JSON.stringify({
-							day : "2012-11-15"
+						uri: 'http://localhost:3000/report',
+						method: 'POST',
+						body: JSON.stringify({
+							day: "2012-11-15"
 						}),
-						headers : {
-							'Content-Type' : 'application/json',
-							'x-reportingapi-token' : ''
+						headers: {
+							'Content-Type': 'application/json',
+							'x-reportingapi-token': ''
 						}
-					}, this.callback)
+					}, this.callback);
 				},
-				"should respond with 401 - negative1" : function(err, res, body) {
+				"should respond with 401 - negative1": function(err, res, body) {
 					assert.equal(res.statusCode, 401);
 				},
-				"should respond with error" : function(err, res, body) {
+				"should respond with error": function(err, res, body) {
 					var result = JSON.parse(body);
 					assert.equal(result.status, "error");
 				}
 			},
-			"A POST to report - negative2" : {
-				topic : function() {
+			"A POST to report - negative2": {
+				topic: function() {
 					request({
-						uri : 'http://localhost:3000/report',
-						method : 'POST',
-						body : JSON.stringify({
-							day : "2012-11-15"
+						uri: 'http://localhost:3000/report',
+						method: 'POST',
+						body: JSON.stringify({
+							day: "2012-11-15"
 						}),
-						headers : {
-							'Content-Type' : 'application/json',
-							'x-reportingapi-token' : fs.readFileSync(config.tokenTextFile, config.encoding)
+						headers: {
+							'Content-Type': 'application/json',
+							'x-reportingapi-token': fs.readFileSync(config.tokenTextFile, config.encoding)
 						}
-					}, this.callback)
+					}, this.callback);
 				},
-				"should respond with 404 - negative2" : function(err, res, body) {
+				"should respond with 404 - negative2": function(err, res, body) {
 					assert.equal(res.statusCode, 404);
 				},
-				"should respond with error" : function(err, res, body) {
+				"should respond with error": function(err, res, body) {
 					var result = JSON.parse(body);
 					assert.equal(result.status, "error");
 				}
 			},
-			"A POST to report - negative3" : {
-				topic : function() {
+			"A POST to report - negative3": {
+				topic: function() {
 					request({
-						uri : 'http://localhost:3000/report',
-						method : 'POST',
-						body : JSON.stringify({
-							locale : 'foo'
+						uri: 'http://localhost:3000/report',
+						method: 'POST',
+						body: JSON.stringify({
+							locale: 'foo'
 						}),
-						headers : {
-							'Content-Type' : 'application/json',
-							'x-reportingapi-token' : fs.readFileSync(config.tokenTextFile, config.encoding)
+						headers: {
+							'Content-Type': 'application/json',
+							'x-reportingapi-token': fs.readFileSync(config.tokenTextFile, config.encoding)
 						}
-					}, this.callback)
+					}, this.callback);
 				},
-				"should respond with 404 - negative3" : function(err, res, body) {
+				"should respond with 404 - negative3": function(err, res, body) {
 					assert.equal(res.statusCode, 404);
 				},
-				"should respond with error" : function(err, res, body) {
+				"should respond with error": function(err, res, body) {
 					var result = JSON.parse(body);
 					assert.equal(result.status, "error");
 				}

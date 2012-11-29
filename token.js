@@ -12,13 +12,13 @@ var crypto = require('crypto'),
 exports.validate = function(token) {
 	var tokenFromFile = fs.readFileSync(config.tokenTextFile, config.encoding);
 	console.log('avast-reporting-api tokenFromFile is: ' + tokenFromFile);
-	
+
 	if (token == tokenFromFile) {
 		return true;
 	}
-	
+
 	return false;
-}
+};
 
 /**
  * Publically facing method to refresh/regenerate the token. A new token
@@ -28,9 +28,9 @@ exports.refresh = function() {
 	var newToken = createToken();
 	fs.writeFileSync(config.tokenTextFile, newToken, config.encoding);
 	console.log('avast-reporting-api tokenFromFile on refresh is: ' + newToken);
-	
+
 	return newToken;
-}
+};
 
 /**
  * Private method to create the token from epoch.
@@ -51,7 +51,7 @@ function createToken() {
  */
 function decryptToken(token) {
 	var decipher = crypto.createDecipher(config.tokenCipherAlgorithm, config.tokenCipherKey);
-	var dec = decipher.update(crypted, config.tokenCipherFormat, config.encoding);
+	var dec = decipher.update(token, config.tokenCipherFormat, config.encoding);
 	dec += decipher.final(config.encoding);
 	console.log("dec is: " + dec);
 	return dec;

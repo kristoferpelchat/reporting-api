@@ -16,23 +16,23 @@ const dayDateFormat = 'YYYY-MM-DD';
  * These are all the supported locales for this system
  */
 var locales = {
-	"locales" : [{
-		"locale" : "en-us",
-		"language" : "English",
-		"country" : "United States"
+	"locales": [{
+		"locale": "en-us",
+		"language": "English",
+		"country": "United States"
 	}]
 }
 
 module.exports = {
-   absolutePathToCSVFile : absolutePathToCSVFile,
-   encoding : encoding,
-   responseContentType : responseContentType,
-   locales : locales,
-   csvFileSuffix : csvFileSuffix,
-   csvFilePostfix : csvFilePostfix,
-   tokenCipherAlgorithm : tokenCipherAlgorithm,
-   tokenCipherKey : tokenCipherKey,
-   tokenCipherFormat : tokenCipherFormat,
-   tokenTextFile : tokenTextFile,
-   dayDateFormat : dayDateFormat
+	absolutePathToCSVFile: absolutePathToCSVFile,
+	encoding: encoding,
+	responseContentType: responseContentType,
+	locales: locales,
+	csvFileSuffix: csvFileSuffix,
+	csvFilePostfix: csvFilePostfix,
+	tokenCipherAlgorithm: tokenCipherAlgorithm,
+	tokenCipherKey: tokenCipherKey,
+	tokenCipherFormat: tokenCipherFormat,
+	tokenTextFile: tokenTextFile,
+	dayDateFormat: dayDateFormat
 };
