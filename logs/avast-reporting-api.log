@@ -1,0 +1,21 @@
+[2012-11-30 00:31:01.021] [DEBUG] avast-reporting-api - avast-reporting-api started on port 3000
+[2012-11-30 00:31:01.021] [DEBUG] avast-reporting-api - avast-reporting-api started on port 3000
+[2012-11-30 00:31:01.021] [DEBUG] avast-reporting-api - avast-reporting-api started on port 3000
+[2012-11-30 00:31:08.808] [DEBUG] avast-reporting-api - avast-reporting-api request body data: [object Object]
+[2012-11-30 00:31:08.808] [DEBUG] avast-reporting-api - avast-reporting-api request body data: [object Object]
+[2012-11-30 00:31:08.808] [DEBUG] avast-reporting-api - avast-reporting-api request body data: [object Object]
+[2012-11-30 00:31:08.810] [DEBUG] avast-reporting-api - avast-reporting-api x-reportingapi-token: 125551e32085748626389766c0636264
+[2012-11-30 00:31:08.810] [DEBUG] avast-reporting-api - avast-reporting-api x-reportingapi-token: 125551e32085748626389766c0636264
+[2012-11-30 00:31:08.810] [DEBUG] avast-reporting-api - avast-reporting-api x-reportingapi-token: 125551e32085748626389766c0636264
+[2012-11-30 00:31:08.810] [DEBUG] avast-reporting-api - avast-reporting-api tokenFromFile is: 125551e32085748626389766c0636264
+[2012-11-30 00:31:08.810] [DEBUG] avast-reporting-api - avast-reporting-api tokenFromFile is: 125551e32085748626389766c0636264
+[2012-11-30 00:31:08.810] [DEBUG] avast-reporting-api - avast-reporting-api tokenFromFile is: 125551e32085748626389766c0636264
+[2012-11-30 00:31:13.434] [DEBUG] avast-reporting-api - avast-reporting-api request body data: [object Object]
+[2012-11-30 00:31:13.434] [DEBUG] avast-reporting-api - avast-reporting-api request body data: [object Object]
+[2012-11-30 00:31:13.434] [DEBUG] avast-reporting-api - avast-reporting-api request body data: [object Object]
+[2012-11-30 00:31:13.435] [DEBUG] avast-reporting-api - avast-reporting-api x-reportingapi-token: 125551e32085748626389766c0636264
+[2012-11-30 00:31:13.435] [DEBUG] avast-reporting-api - avast-reporting-api x-reportingapi-token: 125551e32085748626389766c0636264
+[2012-11-30 00:31:13.435] [DEBUG] avast-reporting-api - avast-reporting-api x-reportingapi-token: 125551e32085748626389766c0636264
+[2012-11-30 00:31:13.435] [DEBUG] avast-reporting-api - avast-reporting-api tokenFromFile is: 125551e32085748626389766c0636264
+[2012-11-30 00:31:13.435] [DEBUG] avast-reporting-api - avast-reporting-api tokenFromFile is: 125551e32085748626389766c0636264
+[2012-11-30 00:31:13.435] [DEBUG] avast-reporting-api - avast-reporting-api tokenFromFile is: 125551e32085748626389766c0636264

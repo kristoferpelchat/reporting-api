@@ -1,19 +1,26 @@
 /**
  * This Javascript file will handle conversion from CSV to JSON
  */
+var config = require('./configuration'),
+	log4js = require('log4js');
+
+log4js.loadAppender('file');
+log4js.addAppender(log4js.appenders.file(config.log4jsFileLocation), 'avast-reporting-api');
+var logger = log4js.getLogger('avast-reporting-api');
+logger.setLevel(config.log4jsLogLevel);
 
 /**
  * Private function to simply log a message to STDOUT or STDERR
  * 
  * @param {Object} message
- * @param {Object} error
+ * @param {Object} errorlogger.debug
  */
 function setMessage(message, error) {
 	if (error) {
-		console.err("csvtojson ERROR: " + message);
+		logger.error("csvtojson ERROR: " + message);
 	} else {
 		if (message.trim() != '') {
-			console.log("csvtojson: " + message);
+			logger.debug("csvtojson: " + message);
 		}
 	}
 }

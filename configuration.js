@@ -11,6 +11,8 @@ const tokenCipherKey = 'InmbuvP6Z8';
 const tokenCipherFormat = 'hex';
 const tokenTextFile = './token.txt';
 const dayDateFormat = 'YYYY-MM-DD';
+const log4jsFileLocation = 'logs/avast-reporting-api.log';
+const log4jsLogLevel = 'DEBUG'; //TRACE, DEBUG, WARN, INFO, ERROR, FATAL
 
 /**
  * These are all the supported locales for this system
@@ -34,5 +36,7 @@ module.exports = {
 	tokenCipherKey: tokenCipherKey,
 	tokenCipherFormat: tokenCipherFormat,
 	tokenTextFile: tokenTextFile,
-	dayDateFormat: dayDateFormat
+	dayDateFormat: dayDateFormat,
+	log4jsFileLocation: log4jsFileLocation,
+	log4jsLogLevel: log4jsLogLevel
 };

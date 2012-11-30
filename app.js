@@ -8,7 +8,8 @@ var express = require('express'),
 	util = require('util'),
 	config = require('./configuration'),
 	tokenlib = require('./token'),
-	moment = require('moment');
+	moment = require('moment'),
+	log4js = require('log4js');
 
 var app = module.exports = express();
 
@@ -37,6 +38,11 @@ function ReportNotFoundError(msg) {
 
 ReportNotFoundError.prototype.__proto__ = Error.prototype;
 
+log4js.loadAppender('file');
+log4js.addAppender(log4js.appenders.file(config.log4jsFileLocation), 'avast-reporting-api');
+var logger = log4js.getLogger('avast-reporting-api');
+logger.setLevel(config.log4jsLogLevel);
+
 /**
  * Token verifcation functionality. The x-reportingapi-token HTTP header is sent
  * in and verified. The verification of the token consists of making sure it is the
@@ -45,7 +51,7 @@ ReportNotFoundError.prototype.__proto__ = Error.prototype;
  */
 app.get('/tokens/verify', function(req, res, next) {
 	var token = req.headers['x-reportingapi-token'];
-	console.log('avast-reporting-api x-reportingapi-token: ' + token);
+	logger.debug('avast-reporting-api x-reportingapi-token: ' + token);
 
 	if (!tokenlib.validate(token)) {
 		next(new InvalidTokenError('Token is invalid: ' + token));
@@ -65,7 +71,7 @@ app.get('/tokens/verify', function(req, res, next) {
  */
 app.get('/tokens/refresh', function(req, res, next) {
 	var token = req.headers['x-reportingapi-token'];
-	console.log('avast-reporting-api x-reportingapi-token: ' + token);
+	logger.debug('avast-reporting-api x-reportingapi-token: ' + token);
 
 	if (!tokenlib.validate(token)) {
 		next(new InvalidTokenError('Token is invalid: ' + token));
@@ -88,7 +94,7 @@ app.get('/tokens/refresh', function(req, res, next) {
  */
 app.get('/locales', function(req, res, next) {
 	var token = req.headers['x-reportingapi-token'];
-	console.log('avast-reporting-api x-reportingapi-token: ' + token);
+	logger.debug('avast-reporting-api x-reportingapi-token: ' + token);
 
 	if (!tokenlib.validate(token)) {
 		next(new InvalidTokenError('Token is invalid: ' + token));
@@ -111,8 +117,8 @@ app.get('/locales', function(req, res, next) {
 app.post('/report', function(req, res, next) {
 	var body = req.body;
 	var token = req.headers['x-reportingapi-token'];
-	console.log("avast-reporting-api request body data: " + body);
-	console.log('avast-reporting-api x-reportingapi-token: ' + token);
+	logger.debug("avast-reporting-api request body data: " + body);
+	logger.debug('avast-reporting-api x-reportingapi-token: ' + token);
 
 	if (!tokenlib.validate(token)) {
 		next(new InvalidTokenError('Token is invalid: ' + token));
@@ -125,7 +131,7 @@ app.post('/report', function(req, res, next) {
 		yesterday.setDate(yesterday.getDate() - 1);
 		var m = moment(yesterday);
 		day = m.format(config.dayDateFormat);
-		console.log('avast-reporting-api day was not passed in but is now set to: ' + day);
+		logger.debug('avast-reporting-api day was not passed in but is now set to: ' + day);
 	}
 
 	var filePath = path.join(config.absolutePathToCSVFile, config.csvFileSuffix + day + config.csvFilePostfix);
@@ -151,7 +157,7 @@ app.post('/report', function(req, res, next) {
  */
 if (!module.parent) {
 	app.listen(3000);
-	console.log('avast-reporting-api started on port 3000');
+	logger.debug('avast-reporting-api started on port 3000');
 }
 
 /**
