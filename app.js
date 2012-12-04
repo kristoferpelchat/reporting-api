@@ -20,11 +20,17 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 
+log4js.loadAppender('file');
+log4js.addAppender(log4js.appenders.file(config.log4jsFileLocation), 'avast-reporting-api');
+var logger = log4js.getLogger('avast-reporting-api');
+logger.setLevel(config.log4jsLogLevel);
+
 function InvalidTokenError(msg) {
 	this.name = 'InvalidTokenError';
 	this.message = msg;
 	Error.call(this, msg);
 	Error.captureStackTrace(this, arguments.callee);
+	logger.error(msg);
 }
 
 InvalidTokenError.prototype.__proto__ = Error.prototype;
@@ -34,14 +40,20 @@ function ReportNotFoundError(msg) {
 	this.message = msg;
 	Error.call(this, msg);
 	Error.captureStackTrace(this, arguments.callee);
+	logger.error(msg);
 }
 
 ReportNotFoundError.prototype.__proto__ = Error.prototype;
 
-log4js.loadAppender('file');
-log4js.addAppender(log4js.appenders.file(config.log4jsFileLocation), 'avast-reporting-api');
-var logger = log4js.getLogger('avast-reporting-api');
-logger.setLevel(config.log4jsLogLevel);
+function RequiredParameterMissing(msg) {
+	this.name = 'RequiredParameterMissing';
+	this.message = msg;
+	Error.call(this, msg);
+	Error.captureStackTrace(this, arguments.callee);
+	logger.error(msg);
+}
+
+RequiredParameterMissing.prototype.__proto__ = Error.prototype;
 
 /**
  * Token verifcation functionality. The x-reportingapi-token HTTP header is sent
@@ -89,8 +101,7 @@ app.get('/tokens/refresh', function(req, res, next) {
 
 /**
  * Return the supported locales. This simply sends back a JSON data object
- * created within the configuration.js. Currently only English is supported
- * for this application.
+ * created within the configuration.js.
  */
 app.get('/locales', function(req, res, next) {
 	var token = req.headers['x-reportingapi-token'];
@@ -124,7 +135,15 @@ app.post('/report', function(req, res, next) {
 		next(new InvalidTokenError('Token is invalid: ' + token));
 	}
 
+	var locale = req.body.locale;
 	var day = req.body.day;
+
+	logger.debug('avast-reporting-api locale: ' + locale);
+	logger.debug('avast-reporting-api day: ' + day);
+
+	if (locale == null) {
+		next(new RequiredParameterMissing('required locale parameter is missing'));
+	}
 
 	if (day == null) {
 		var yesterday = new Date();
@@ -148,12 +167,30 @@ app.post('/report', function(req, res, next) {
 	}
 
 	var jsonResult = csvToJson.csvToJson(csvString);
-
-	res.contentType(config.responseContentType);  res.send(jsonResult);
+	
+	res.contentType(config.responseContentType);  res.send(sortForLocale(eval('(' + jsonResult + ')'), locale));
 });
 
 /**
- * More Middleware
+ * This method will sort for the locale passed in. So it will only
+ * send back data that contains the locale passed in for 'Locale' in
+ * the JSON object.
+ */
+function sortForLocale(jsonResult, locale) {
+	var i = -1;
+	while (i < jsonResult.length) {
+		i++;
+		if (typeof jsonResult[i] !== 'undefined' && jsonResult[i].Locale !== locale) {
+			logger.debug('avast-reporting-api removing: ' + jsonResult[i].Locale);
+			jsonResult.splice(i, 1);
+			i = -1;
+		}
+	}
+	return jsonResult;
+}
+
+/**
+ * More Middleware functionality
  */
 if (!module.parent) {
 	app.listen(3000);
@@ -176,6 +213,8 @@ app.use(function(err, req, res, next) {
 		res.status(401);
 	} else if (err instanceof ReportNotFoundError) {
 		res.status(404);
+	} else if (err instanceof RequiredParameterMissing) {
+		res.status(400);
 	} else {
 		res.status(500);
 	}

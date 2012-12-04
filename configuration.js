@@ -1,7 +1,7 @@
 /**
  * Constants relating to application conifiguration
  */
-const absolutePathToCSVFile = '/Users/kristofer_pelchat/Development/github/avast-reporting-api/test/data/';
+const absolutePathToCSVFile = __dirname.concat('/test/data/');
 const encoding = 'utf8';
 const responseContentType = 'application/json; charset=utf8';
 const csvFileSuffix = 'Avast_Calls_Stats_';
@@ -9,9 +9,9 @@ const csvFilePostfix = '.csv';
 const tokenCipherAlgorithm = 'aes-256-cbc';
 const tokenCipherKey = 'InmbuvP6Z8';
 const tokenCipherFormat = 'hex';
-const tokenTextFile = './token.txt';
+const tokenTextFile = __dirname.concat('/token.txt');
 const dayDateFormat = 'YYYY-MM-DD';
-const log4jsFileLocation = 'logs/avast-reporting-api.log';
+const log4jsFileLocation = __dirname.concat('/logs/avast-reporting-api.log');
 const log4jsLogLevel = 'DEBUG'; //TRACE, DEBUG, WARN, INFO, ERROR, FATAL
 
 /**
@@ -20,10 +20,23 @@ const log4jsLogLevel = 'DEBUG'; //TRACE, DEBUG, WARN, INFO, ERROR, FATAL
 var locales = {
 	"locales": [{
 		"locale": "en-us",
-		"language": "English",
+		"language": "US (English)",
 		"country": "United States"
+	}, {
+		"locale": "es-us",
+		"language": "US (Spanish)",
+		"country": "United States"
+	}, {
+		"locale": "es-mx",
+		"language": "Mexico",
+		"country": "Mexico"
+	}, {
+		"locale": "es-es",
+		"language": "Spain",
+		"country": "Spain"
 	}]
 }
+
 
 module.exports = {
 	absolutePathToCSVFile: absolutePathToCSVFile,
