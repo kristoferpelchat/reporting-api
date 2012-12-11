@@ -13,6 +13,7 @@ const tokenTextFile = __dirname.concat('/token.txt');
 const dayDateFormat = 'YYYY-MM-DD';
 const log4jsFileLocation = __dirname.concat('/logs/avast-reporting-api.log');
 const log4jsLogLevel = 'DEBUG'; //TRACE, DEBUG, WARN, INFO, ERROR, FATAL
+const appListenPort = 3000; 
 
 /**
  * These are all the supported locales for this system
@@ -51,5 +52,6 @@ module.exports = {
 	tokenTextFile: tokenTextFile,
 	dayDateFormat: dayDateFormat,
 	log4jsFileLocation: log4jsFileLocation,
-	log4jsLogLevel: log4jsLogLevel
+	log4jsLogLevel: log4jsLogLevel,
+	appListenPort: appListenPort
 };
