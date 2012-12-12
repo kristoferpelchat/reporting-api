@@ -194,7 +194,7 @@ function sortForLocale(jsonResult, locale) {
  */
 if (!module.parent) {
 	app.listen(config.appListenPort);
-	logger.debug('avast-reporting-api started on port 3000');
+	logger.debug('avast-reporting-api started on port ' + config.appListenPort);
 }
 
 /**
